@@ -1,1 +1,63 @@
-echo "hello world"
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loicoin</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navbar Horizontale -->
+    <div class="horizontal-navbar">
+        <div class="logo-horizontal">
+            <img src="img/blockchain.png" weight="25" height="25" alt="Logo">
+            <span>Loicoin.com</span>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Recherche de Blockchain, Transactions, Wallets et Blocs">
+            <button>Search</button>
+        </div>
+        <div class="sign-in">
+            <button>Sign In</button>
+        </div>
+    </div>
+
+    <!-- Navbar Verticale -->
+    <div class="vertical-navbar">
+        <ul class="nav-links">
+            <li>
+                <a href="#accueil">
+                    <img src="img/accueil.png" weight="20" height="20" alt="Accueil">
+                    <span><strong>Accueil</strong></span>
+                </a>
+            </li>
+            <li>
+                <a href="se connecter">
+                    <img src="img/se-connecter.png" weight="20" height="20" alt="se-connecter">
+                    <span><strong>connecter</strong></span>
+                </a>
+            </li>
+            <li>
+                <a href="#prix">
+                    <img src="img/euro.png" weight="20" height="20" alt="Prix">
+                    <span><strong>Prix</strong></span>
+                </a>
+            </li>
+            <li>
+                <a href="à propos">
+                    <img src="img/bouton-dinformation.png" weight="20" height="20" alt="à propos">
+                    <span><strong>à propos</strong></span>
+                </a>
+            </li>
+            <li>
+        </ul>
+
+    </div>
+
+    <!-- Contenu Principal -->
+    <div class="content">
+        <h1>Bienvenue sur Loicoin.com</h1>
+        <p>La 1ere plateforme, de minage d'échange et stockage de bitcoin en toute sécurité .</p>
+    </div>
+</body>
+</html>
