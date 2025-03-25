@@ -14,76 +14,97 @@ if (!isset($_SESSION['name'])) {
     header("Location: connect.php");
     exit();
 }
+
 $name = $_SESSION['name'];
+$date = date('Y-m-d H:i:s'); 
+$statut = "attente";
 
 require('database.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Récupérer les données du formulaire
-    $id_expediteur = 1; // Remplacez par l'ID de l'expéditeur réel
     $receiver = $_POST['receiver'];
     $montant = $_POST['montant'];
 
     // Convertir le montant en nombre
     $montant = floatval($montant);
 
-    // Récupérer le solde de l'expéditeur
-    $sql = "SELECT solde FROM wallet WHERE id_u = ?";
-    $stmt = $connect->prepare($sql);
-    $stmt->bind_param("i", $id_expediteur);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $row = $result->fetch_assoc();
-    $solde_expediteur = $row['solde'];
+    // Récupérer l'ID de l'expéditeur à partir de son nom
+    $sql_expediteur = "SELECT id_u FROM wallet WHERE client = ?";
+    $stmt_expediteur = $connect->prepare($sql_expediteur);
+    $stmt_expediteur->bind_param("s", $name);
+    $stmt_expediteur->execute();
+    $result_expediteur = $stmt_expediteur->get_result();
+    $row_expediteur = $result_expediteur->fetch_assoc();
 
-    // Vérifier si le montant plus les frais est supérieur au solde
-    $fee = 0.5;
-    $total_cost = $montant + $fee;
-    $trahash = 123456789987654;
+    if ($row_expediteur) {
+        $id_expediteur = $row_expediteur['id_u'];
 
-    if ($total_cost > $solde_expediteur) {
-        echo "Erreur : Solde insuffisant pour effectuer cette transaction.";
-    } else {
-        // Mettre à jour le solde de l'expéditeur
-        $nouveau_solde_expediteur = $solde_expediteur - $total_cost;
-        $sql_update_expediteur = "UPDATE wallet SET solde = ? WHERE id_u = ?";
-        $stmt_update_expediteur = $connect->prepare($sql_update_expediteur);
-        $stmt_update_expediteur->bind_param("di", $nouveau_solde_expediteur, $id_expediteur);
-        $stmt_update_expediteur->execute();
+        // Récupérer le solde de l'expéditeur
+        $sql_solde = "SELECT solde FROM wallet WHERE id_u = ?";
+        $stmt_solde = $connect->prepare($sql_solde);
+        $stmt_solde->bind_param("i", $id_expediteur);
+        $stmt_solde->execute();
+        $result_solde = $stmt_solde->get_result();
+        $row_solde = $result_solde->fetch_assoc();
+        $solde_expediteur = $row_solde['solde'];
 
-        // Mettre à jour le solde du destinataire
-        $sql_select_receiver = "SELECT id_u FROM wallet WHERE client = ?";
-        $stmt_select_receiver = $connect->prepare($sql_select_receiver);
-        $stmt_select_receiver->bind_param("s", $receiver);
-        $stmt_select_receiver->execute();
-        $result_receiver = $stmt_select_receiver->get_result();
-        $row_receiver = $result_receiver->fetch_assoc();
+        // Vérifier si le montant plus les frais est supérieur au solde
+        $fee = 0.5;
+        $total_cost = $montant + $fee;
+        
 
-        if ($row_receiver) {
-            $id_receiver = $row_receiver['id_u'];
-            $sql_update_receiver = "UPDATE wallet SET solde = solde + ? WHERE id_u = ?";
-            $stmt_update_receiver = $connect->prepare($sql_update_receiver);
-            $stmt_update_receiver->bind_param("di", $montant, $id_receiver);
-            $stmt_update_receiver->execute();
-
-            // Enregistrer la transaction
-            $in_transaction = "INSERT INTO transaction (sender, receiver, montant, fee, tra_hash) VALUES (?, ?, ?, ?, ?)";
-            $stmt_transaction = $connect->prepare($in_transaction);
-            $stmt_transaction->bind_param("ssddd", $name, $receiver, $montant, $fee, $trahash);
-            $stmt_transaction->execute();
-
-            echo "Transaction réussie ! $montant BTC a été envoyé à $receiver.";
+        if ($total_cost > $solde_expediteur) {
+            echo "Erreur : Solde insuffisant pour effectuer cette transaction.";
         } else {
-            echo "Erreur : Destinataire non trouvé.";
+            // Mettre à jour le solde de l'expéditeur
+            $nouveau_solde_expediteur = $solde_expediteur - $total_cost;
+            $sql_update_expediteur = "UPDATE wallet SET solde = ? WHERE id_u = ?";
+            $stmt_update_expediteur = $connect->prepare($sql_update_expediteur);
+            $stmt_update_expediteur->bind_param("di", $nouveau_solde_expediteur, $id_expediteur);
+            $stmt_update_expediteur->execute();
+
+            // Mettre à jour le solde du destinataire
+            $sql_select_receiver = "SELECT id_u FROM wallet WHERE client = ?";
+            $stmt_select_receiver = $connect->prepare($sql_select_receiver);
+            $stmt_select_receiver->bind_param("s", $receiver);
+            $stmt_select_receiver->execute();
+            $result_receiver = $stmt_select_receiver->get_result();
+            $row_receiver = $result_receiver->fetch_assoc();
+
+            if ($row_receiver) {
+                $id_receiver = $row_receiver['id_u'];
+                $sql_update_receiver = "UPDATE wallet SET solde = solde + ? WHERE id_u = ?";
+                $stmt_update_receiver = $connect->prepare($sql_update_receiver);
+                $stmt_update_receiver->bind_param("di", $montant, $id_receiver);
+                $stmt_update_receiver->execute();
+
+                // Enregistrer la transaction
+                $in_transaction = "INSERT INTO transaction (sender, receiver, montant, fee, date, statut) VALUES (?, ?, ?, ?, ?, ?)";
+                $stmt_transaction = $connect->prepare($in_transaction);
+                $stmt_transaction->bind_param("ssddss", $name, $receiver, $montant, $fee, $date, $statut);
+                $stmt_transaction->execute();
+
+                echo "Transaction réussie ! $montant BTC a été envoyé à $receiver.";
+            } else {
+                echo "Erreur : Destinataire non trouvé.";
+            }
+
+            // Fermer les déclarations
+            $stmt_update_expediteur->close();
+            $stmt_select_receiver->close();
+            $stmt_update_receiver->close();
+            $stmt_transaction->close();
         }
 
-        // Fermer les déclarations
-        $stmt_update_expediteur->close();
-        $stmt_select_receiver->close();
-        $stmt_update_receiver->close();
-        $stmt_transaction->close();
+        // Fermer les déclarations de solde
+        $stmt_solde->close();
+    } else {
+        echo "Erreur : Expéditeur non trouvé.";
     }
 
+    // Fermer les déclarations d'expéditeur
+    $stmt_expediteur->close();
 }
 ?>
 
