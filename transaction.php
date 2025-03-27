@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loicoin</title>
+    <title>Transaction Loicoin</title>
+    <link rel="stylesheet" href="transaction.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+   
 </head>
 <body>
 <?php
@@ -23,13 +25,11 @@ require('database.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Récupérer les données du formulaire
-    $receiver = $_POST['receiver'];
-    $montant = $_POST['montant'];
+    $receiver = htmlspecialchars($_POST['receiver']);
+    $montant = floatval($_POST['montant']);
+    $fee = 0.5;
 
-    // Convertir le montant en nombre
-    $montant = floatval($montant);
-
-    // Récupérer l'ID de l'expéditeur à partir de son nom
+    // Récupérer l'ID de l'expéditeur
     $sql_expediteur = "SELECT id_u FROM wallet WHERE client = ?";
     $stmt_expediteur = $connect->prepare($sql_expediteur);
     $stmt_expediteur->bind_param("s", $name);
@@ -49,13 +49,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $row_solde = $result_solde->fetch_assoc();
         $solde_expediteur = $row_solde['solde'];
 
-        // Vérifier si le montant plus les frais est supérieur au solde
-        $fee = 0.5;
+        // Vérifier le solde
         $total_cost = $montant + $fee;
         
-
         if ($total_cost > $solde_expediteur) {
-            echo "Erreur : Solde insuffisant pour effectuer cette transaction.";
+            echo '<div class="container"><div class="error-message transaction-message">Erreur : Solde insuffisant pour effectuer cette transaction.</div></div>';
         } else {
             // Mettre à jour le solde de l'expéditeur
             $nouveau_solde_expediteur = $solde_expediteur - $total_cost;
@@ -85,9 +83,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt_transaction->bind_param("ssddss", $name, $receiver, $montant, $fee, $date, $statut);
                 $stmt_transaction->execute();
 
-                echo "Transaction réussie ! $montant BTC a été envoyé à $receiver.";
+                echo '<div class="container"><div class="success-message transaction-message">Transaction réussie ! ' . number_format($montant, 8) . ' BTC a été envoyé à ' . htmlspecialchars($receiver) . '.</div></div>';
             } else {
-                echo "Erreur : Destinataire non trouvé.";
+                echo '<div class="container"><div class="error-message transaction-message">Erreur : Destinataire non trouvé.</div></div>';
             }
 
             // Fermer les déclarations
@@ -100,7 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Fermer les déclarations de solde
         $stmt_solde->close();
     } else {
-        echo "Erreur : Expéditeur non trouvé.";
+        echo '<div class="container"><div class="error-message transaction-message">Erreur : Expéditeur non trouvé.</div></div>';
     }
 
     // Fermer les déclarations d'expéditeur
@@ -108,24 +106,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-<div class="container mt-5">
-    <h2>Envoi d'Argent</h2>
-    <form action="#" method="POST">
-        <div class="mb-3">
-            <label for="receiver" class="form-label">Destinataire</label>
-            <input type="text" class="form-control" id="receiver" name="receiver" aria-describedby="emailHelp" required>
+<div class="container">
+    <div class="transaction-card">
+        <h2><i class="fas fa-paper-plane"></i> Envoi de BTC</h2>
+        
+        <div class="fee-info">
+            <i class="fas fa-info-circle"></i>
+            <div class="fee-text">
+                <strong>Frais de transaction : 0.5 BTC</strong><br>
+                Ce montant sera déduit en plus du montant envoyé.
+            </div>
         </div>
-        <div class="mb-3">
-            <label for="montant" class="form-label">Montant</label>
-            <input type="text" class="form-control" id="montant" name="montant" placeholder="BTC" required>
-        </div>
-        <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1" required>
-            <label class="form-check-label" for="exampleCheck1">Valider l'opération</label>
-        </div>
-        <button type="submit" class="btn btn-primary">Envoyer</button>
-    </form>
-    <?php echo "$name, envoie d'argent page"; ?>
+        
+        <form action="#" method="POST">
+            <div class="mb-3">
+                <label for="receiver" class="form-label">Destinataire</label>
+                <input type="text" class="form-control" id="receiver" name="receiver" placeholder="Adresse ou identifiant du destinataire" required>
+            </div>
+            <div class="mb-3">
+                <label for="montant" class="form-label">Montant à envoyer</label>
+                <div class="btc-input">
+                    <input type="number" step="0.00000001" class="form-control" id="montant" name="montant" placeholder="0.00" required>
+                    <span>BTC</span>
+                </div>
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="confirmation" required>
+                <label class="form-check-label" for="confirmation">Je confirme cette transaction</label>
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-paper-plane"></i> Envoyer
+            </button>
+        </form>
+    </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>

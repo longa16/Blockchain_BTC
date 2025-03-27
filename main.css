@@ -1,103 +1,137 @@
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f4f9;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-}
-
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    width: 600px;
-    text-align: center;
-}
-
-.progress-bar {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 20px;
-}
-
-.progress-circle {
-    background: #007BFF;
-    color: #fff;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 16px;
-    font-weight: bold;
-    margin-right: 20px;
-}
-
-.progress-text h2 {
-    margin: 0;
-    font-size: 24px;
-    color: #333;
-}
-
-.progress-text p {
-    margin: 5px 0;
-    color: #666;
-}
-
-.verification-steps {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    margin-bottom: 20px;
-}
-
-.step {
-    text-align: left;
-    width: 30%;
-}
-
-.step input {
-    display: none;
-}
-
-.step label {
-    display: block;
-    padding: 10px;
-    border: 2px solid transparent;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: border-color 0.3s ease;
-}
-
-.step input:checked + label {
-    border-color: #007BFF;
-    background: #e6f7ff;
-}
-
-.step p {
-    margin: 5px 0 0 15px;
-    color: #666;
-}
-
-.verify-button {
-    padding: 10px 20px;
-    background: #007BFF;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
 
 .verify-button:hover {
     background: #0056b3;
 }
+        :root {
+            --primary-color: #6c63ff;
+            --secondary-color: #4d44db;
+            --dark-color: #2a2a72;
+            --light-color: #f8f9fa;
+            --success-color: #28a745;
+            --bitcoin-orange: #f7931a;
+        }
+        
+        body {
+            background-color: #f5f7ff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background: white !important;
+        }
+        
+        .navbar-brand {
+            font-weight: 600;
+            color: var(--dark-color) !important;
+            display: flex;
+            align-items: center;
+        }
+        
+        .navbar-brand img {
+            margin-right: 10px;
+        }
+        
+        .btn-outline-success {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .btn-outline-success:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 50px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            width: fit-content;
+        }
+        
+        .wallet-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            background: white;
+            margin: 30px auto;
+            transition: transform 0.3s;
+            max-width: 350px;
+        }
+        
+        .wallet-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .wallet-card .card-title {
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+        
+        .btc-amount {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--bitcoin-orange);
+            margin: 10px 0;
+        }
+        
+        .eur-amount {
+            font-size: 1.2rem;
+            color: #666;
+        }
+        
+        .offcanvas {
+            background-color: var(--dark-color);
+            color: white;
+        }
+        
+        .offcanvas-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .offcanvas-body a {
+            color: white;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .offcanvas-body a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .offcanvas-body a img {
+            filter: brightness(0) invert(1);
+        }
+        
+        .no-wallet-message {
+            text-align: center;
+            margin-top: 50px;
+            color: #666;
+            font-size: 1.2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .wallet-card {
+                width: 100%;
+            }
+        }
+

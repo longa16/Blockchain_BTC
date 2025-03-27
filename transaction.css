@@ -1,0 +1,148 @@
+:root {
+    --primary-color: #6c63ff;
+    --secondary-color: #4d44db;
+    --dark-color: #2a2a72;
+    --light-color: #f8f9fa;
+    --success-color: #28a745;
+    --error-color: #dc3545;
+    --bitcoin-orange: #f7931a;
+    --fee-color: #ffc107;
+}
+
+body {
+    background-color: #f5f7ff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+}
+
+.container {
+    max-width: 600px;
+    margin-top: 30px;
+}
+
+.transaction-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+h2 {
+    color: var(--dark-color);
+    font-weight: 700;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--dark-color);
+    margin-bottom: 8px;
+}
+
+.form-control {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    transition: all 0.3s;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    border-radius: 10px;
+    padding: 12px 25px;
+    font-weight: 600;
+    width: 100%;
+    margin-top: 10px;
+    transition: all 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+.form-check {
+    margin: 20px 0;
+}
+
+.form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.fee-info {
+    background-color: rgba(255, 193, 7, 0.1);
+    border-left: 4px solid var(--fee-color);
+    padding: 15px;
+    border-radius: 5px;
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+}
+
+.fee-info i {
+    color: var(--fee-color);
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
+
+.fee-text {
+    font-size: 0.9rem;
+}
+
+.transaction-message {
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
+    font-weight: 500;
+}
+
+.success-message {
+    background-color: rgba(40, 167, 69, 0.1);
+    border-left: 4px solid var(--success-color);
+    color: var(--success-color);
+}
+
+.error-message {
+    background-color: rgba(220, 53, 69, 0.1);
+    border-left: 4px solid var(--error-color);
+    color: var(--error-color);
+}
+
+.user-info {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+    color: #666;
+}
+
+.btc-input {
+    position: relative;
+}
+
+.btc-input span {
+    position: absolute;
+    right: 15px;
+    top: 12px;
+    color: var(--bitcoin-orange);
+    font-weight: 600;
+}
+
+@media (max-width: 576px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    .transaction-card {
+        padding: 20px;
+    }
+}

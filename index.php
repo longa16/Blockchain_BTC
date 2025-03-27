@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loicoin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -58,7 +59,20 @@
     <!-- Contenu Principal -->
     <div class="content">
         <h1>Bienvenue sur Loicoin.com</h1>
-        <p>La 1ere plateforme, de minage d'échange et stockage de bitcoin en toute sécurité .</p>
+        <p>La 1ere plateforme, de minage d'échange et stockage de bitcoin en toute sécurité <br>
+            recommandée par Satoshi Nakamoto.</p>
+            <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="img/blockchain-technology-cartoon-illustration.jpg" class="d-block w-100" alt="...">
     </div>
+    <div class="carousel-item">
+      <img src="img/caucasian-blond-man-wearing-bitcoin-t-shirt-doing-time-out-gesture-with-hands-frustrated-serious-face.jpg" class="d-block w-100" alt="...">
+    </div>
+    <div class="carousel-item">
+      <img src="img/closeup-golden-bitcoins-dark-reflective-surface-histogram-decreasing-crypto.jpg" class="d-block w-100" alt="...">
+    </div>
+  </div>
+</div>
 </body>
 </html>
